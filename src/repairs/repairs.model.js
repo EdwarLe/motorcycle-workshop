@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database/database.js";
 
-const Repair = sequelize.define('repair', {
+const Repair = sequelize.define("repair", {
     id: {
         primaryKey: true,
         type: DataTypes.INTEGER,
@@ -32,7 +32,7 @@ const Repair = sequelize.define('repair', {
 
     userId: {
         type: DataTypes.INTEGER,
-        allowNull:false
+        allowNull:false,
     }
 })
 

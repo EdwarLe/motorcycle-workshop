@@ -52,7 +52,7 @@ export const updateUser = async (req, res) => {
       });
     }
 
-    const userUpdate = await userService.updateUser(user, req.body);
+    const userUpdate = await userService.updateUser(user, req.body.name, req.body.email);
 
     return res.status(201).json(userUpdate);
   } catch (error) {

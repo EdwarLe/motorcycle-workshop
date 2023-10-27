@@ -1,3 +1,4 @@
+import { partialValidateUser, validateUser } from "./users.schema.js";
 import { UserService } from "./users.service.js";
 
 const userService = new UserService();
@@ -14,7 +15,17 @@ export const findAllUsers = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    const users = await userService.createUser(req.body);
+
+    const {hasError, errorMessage, userData} = validateUser(req.body)
+
+    if(hasError) {
+      return res.status(421).json({
+        status: 'error',
+        message: errorMessage
+      })
+    }
+
+    const users = await userService.createUser(userData);
 
     return res.status(201).json(users);
   } catch (error) {
@@ -24,15 +35,7 @@ export const createUser = async (req, res) => {
 
 export const findOneUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await userService.findOneUser(id);
-
-    if (!user) {
-      return res.status(404).json({
-        status: "error",
-        message: "User not found",
-      });
-    }
+    const {user} = req
 
     return res.status(201).json(user);
   } catch (error) {
@@ -42,17 +45,17 @@ export const findOneUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await userService.findOneUser(id);
+    const {user} = req
 
-    if (!user) {
-      return res.status(500).json({
-        status: "error",
-        message: "User not found",
-      });
+    const {hasError, errorMessage, userData} = partialValidateUser(req.body)
+
+    if(hasError) {
+      return res.status(421).json({
+        status: 'error',
+        message: errorMessage
+      })
     }
-
-    const userUpdate = await userService.updateUser(user, req.body.name, req.body.email);
+    const userUpdate = await userService.updateUser(user, userData.name, userData.email);
 
     return res.status(201).json(userUpdate);
   } catch (error) {
@@ -62,15 +65,7 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await userService.findOneUser(id);
-
-    if (!user) {
-      return res.status(404).json({
-        status: "error",
-        message: "User not found",
-      });
-    }
+    const {user} = req
 
     await userService.deleteUser(user);
 

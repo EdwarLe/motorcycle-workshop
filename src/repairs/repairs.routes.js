@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createRepair, deleteRepair, findAllRepairs, findOneRepair, updateRepair } from "./repairs.controller.js";
+import { validateExistRepairs } from "./repairs.middlewares.js";
 
 export const router = Router()
 
@@ -8,7 +9,7 @@ router.route('/')
 .post(createRepair)
 
 router.route('/:id')
-.get(findOneRepair)
-.patch(updateRepair)
-.delete(deleteRepair)
+.get(validateExistRepairs, findOneRepair)
+.patch(validateExistRepairs, updateRepair)
+.delete(validateExistRepairs, deleteRepair)
 

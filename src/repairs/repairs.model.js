@@ -14,13 +14,23 @@ const Repair = sequelize.define("repair", {
         allowNull: false
     },
 
-    color: {
-        type: DataTypes.STRING(20),
-        allowNull: false
+    //color: {
+    //     type: DataTypes.STRING(20),
+    //     allowNull: false
+    // },
+
+    motorsNumber: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
     },
 
-    brand: {
-        type: DataTypes.STRING(20),
+    // brand: {
+    //     type: DataTypes.STRING(20),
+    //     allowNull: false
+    // },
+
+    description: {
+        type: DataTypes.TEXT,
         allowNull: false
     },
 

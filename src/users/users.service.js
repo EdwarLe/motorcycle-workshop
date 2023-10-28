@@ -22,6 +22,15 @@ export class UserService {
     });
   }
 
+  async findOneUserByEmail(email) {
+    return await User.findOne({
+      where:{
+        email,
+        status: 'available'
+      }
+    })
+  }
+
   async updateUser(user, name, email) {
     return await user.update({
         name: name,

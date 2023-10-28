@@ -9,6 +9,20 @@ export const usersSchema = z.object({
     role: z.enum(["employee", "customer"])
 })
 
+export const loginUserSchema = z.object({
+    email: z.string().email({message: 'Invalid email'}),
+    password: z.string().min(8, {message: 'Password is too short'})
+})
+
+export const validateLogin = (data) => {
+    const result = loginUserSchema.safeParse(data)
+    const {hasError, errorMessage, data: loginData} = extractValidationData(result)
+
+    return {
+        hasError, errorMessage, loginData
+    }
+}
+
 export const validateUser = (data) => {
     const result = usersSchema.safeParse(data)
     const {hasError, errorMessage, data: userData} = extractValidationData(result)

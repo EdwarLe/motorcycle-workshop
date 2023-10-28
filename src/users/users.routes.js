@@ -1,12 +1,15 @@
 import { Router } from "express";
-import { createUser, deleteUser, findAllUsers, findOneUser, updateUser } from "./users.controller.js";
+import { createUser, deleteUser, findAllUsers, findOneUser, login, updateUser } from "./users.controller.js";
 import { validateExistUser } from "./users.middlewares.js";
 
 export const router = Router()
 
 router.route('/')
 .get(findAllUsers)
-.post(createUser)
+
+router.post('/register', createUser)
+
+router.post('/login', login)
 
 router.route('/:id')
 .get(validateExistUser, findOneUser)

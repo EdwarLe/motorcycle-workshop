@@ -1,6 +1,13 @@
-import { encryptedPassword, verifyPassword } from "../config/plugins/encripted-password.js";
+import {
+  encryptedPassword,
+  verifyPassword,
+} from "../config/plugins/encripted-password.js";
 import generateJWT from "../config/plugins/generate-JWT.js";
-import { partialValidateUser, validateLogin, validateUser } from "./users.schema.js";
+import {
+  partialValidateUser,
+  validateLogin,
+  validateUser,
+} from "./users.schema.js";
 import { UserService } from "./users.service.js";
 
 const userService = new UserService();
@@ -17,60 +24,60 @@ export const findAllUsers = async (req, res) => {
 
 export const createUser = async (req, res, next) => {
   try {
+    const { hasError, errorMessage, userData } = validateUser(req.body);
 
-    const {hasError, errorMessage, userData} = validateUser(req.body)
-
-    if(hasError) {
+    if (hasError) {
       return res.status(421).json({
-        status: 'error',
-        message: errorMessage
-      })
+        status: "error",
+        message: errorMessage,
+      });
     }
 
     const user = await userService.createUser(userData);
 
-  
-
-    const token = await generateJWT(user.id)
+    const token = await generateJWT(user.id);
 
     return res.status(201).json({
       token,
-      user
+      user,
     });
   } catch (error) {
     return res.status(404).json(error);
   }
 };
 
-export const login = async(req, res, next) => {
-  const {hasError, errorMessage, loginData} = validateLogin(req.body)
+export const login = async (req, res, next) => {
+  const { hasError, errorMessage, loginData } = validateLogin(req.body);
 
-  if(hasError) {
+  if (hasError) {
     return res.status(422).json({
-      status: 'error',
-      message: errorMessage
-    })
+      status: "error",
+      message: errorMessage,
+    });
   }
 
-  const user = await userService.findOneUserByEmail(loginData.email)
+  const user = await userService.findOneUserByEmail(loginData.email);
 
-  if(!user) {
+  if (!user) {
     return res.status(401).json({
-      status: 'error',
-      message: 'This account does not exist'
-    })
+      status: "error",
+      message: "This account does not exist",
+    });
   }
 
-  const isCorrectPassword = await verifyPassword(loginData.password, user.password)
+  const isCorrectPassword = await verifyPassword(
+    loginData.password,
+    user.password
+  );
 
-  if(!isCorrectPassword) {
+  if (!isCorrectPassword) {
     return res.status(401).json({
-      status: 'error',
-      message: 'Incorrect email or password'
-    })
+      status: "error",
+      message: "Incorrect email or password",
+    });
   }
 
-  const token = await generateJWT(user.id)
+  const token = await generateJWT(user.id);
 
   return res.status(200).json({
     token,
@@ -78,46 +85,49 @@ export const login = async(req, res, next) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role
-    }
-  })
-}
+      role: user.role,
+    },
+  });
+};
 
-export const changePassword = async(req, res,next) => {
-  const {sessionUser} = req;
-  const {currentPassword, newPassword} = req.body
-  
-  if(currentPassword === newPassword) {
+export const changePassword = async (req, res, next) => {
+  const { sessionUser } = req;
+  const { currentPassword, newPassword } = req.body;
+
+  if (currentPassword === newPassword) {
     return res.status(401).json({
-      status: 'error',
-      message: 'The password can not be equals'
-    })
+      status: "error",
+      message: "The password can not be equals",
+    });
   }
 
-  const isCorrectPassword = await verifyPassword(loginData.password, user.password)
+  const isCorrectPassword = await verifyPassword(
+    loginData.password,
+    user.password
+  );
 
-  if(!isCorrectPassword) {
+  if (!isCorrectPassword) {
     return res.status(401).json({
-      status: 'error',
-      message: 'Incorrect email or password'
-    })
+      status: "error",
+      message: "Incorrect email or password",
+    });
   }
 
-  const hashedNewPassword = await encryptedPassword(newPassword)
+  const hashedNewPassword = await encryptedPassword(newPassword);
 
   await userService.updateUser(sessionUser, {
-    password:hashedNewPassword,
-    changePasswordAt: new Date()
-  })
+    password: hashedNewPassword,
+    changePasswordAt: new Date(),
+  });
 
   return res.status(200).json({
-    message: 'The user password was updted successfully'
-  })
-}
+    message: "The user password was updted successfully",
+  });
+};
 
 export const findOneUser = async (req, res) => {
   try {
-    const {user} = req
+    const { user } = req;
 
     return res.status(201).json(user);
   } catch (error) {
@@ -127,17 +137,21 @@ export const findOneUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const {user} = req
+    const { user } = req;
 
-    const {hasError, errorMessage, userData} = partialValidateUser(req.body)
+    const { hasError, errorMessage, userData } = partialValidateUser(req.body);
 
-    if(hasError) {
+    if (hasError) {
       return res.status(421).json({
-        status: 'error',
-        message: errorMessage
-      })
+        status: "error",
+        message: errorMessage,
+      });
     }
-    const userUpdate = await userService.updateUser(user, userData.name, userData.email);
+    const userUpdate = await userService.updateUser(
+      user,
+      userData.name,
+      userData.email
+    );
 
     return res.status(201).json(userUpdate);
   } catch (error) {
@@ -147,12 +161,12 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const {user} = req
+    const { user } = req;
 
     await userService.deleteUser(user);
 
     return res.status(201).json(null);
   } catch (error) {
-    return res.status(500).json(error)
+    return res.status(500).json(error);
   }
 };

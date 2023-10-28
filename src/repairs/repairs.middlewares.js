@@ -1,20 +1,19 @@
-import { RepairService } from "./repairs.service.js"
+import { RepairService } from "./repairs.service.js";
 
+const repairService = new RepairService();
 
-const repairService = new RepairService()
+export const validateExistRepairs = async (req, res, next) => {
+  const { id } = req.params;
 
-export const validateExistRepairs = async(req, res, next) => {
-    const {id} = req.params
+  const repair = await repairService.findOneRepair(id);
 
-    const repair = await repairService.findOneRepair(id)
+  if (!repair) {
+    return res.status(401).json({
+      status: "error",
+      message: "Register not found",
+    });
+  }
 
-    if(!repair) {
-        return res.status(401).json({
-            status: 'error',
-            message: 'Register not found'
-        })
-    }
-
-    req.repair = repair
-    next()
-}
+  req.repair = repair;
+  next();
+};

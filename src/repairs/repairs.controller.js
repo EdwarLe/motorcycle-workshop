@@ -14,15 +14,15 @@ export const findAllRepairs = async (req, res) => {
 
 export const createRepair = async (req, res) => {
   try {
-    const {hasError, errorMessage, repairData} = validateRepair(req.body)
+    const { hasError, errorMessage, repairData } = validateRepair(req.body);
 
     const repair = await repairService.createRepair(repairData);
 
-    if(hasError) {
-      return res.status(421).json( {
-        status: 'error',
-        message: errorMessage
-      })
+    if (hasError) {
+      return res.status(421).json({
+        status: "error",
+        message: errorMessage,
+      });
     }
     return res.status(201).json(repair);
   } catch (error) {
@@ -32,7 +32,7 @@ export const createRepair = async (req, res) => {
 
 export const findOneRepair = async (req, res) => {
   try {
-    const {repair} = req
+    const { repair } = req;
     return res.status(201).json(repair);
   } catch (error) {
     return res.status(500).json(error);
@@ -41,15 +41,17 @@ export const findOneRepair = async (req, res) => {
 
 export const updateRepair = async (req, res) => {
   try {
-    const {repair} = req
+    const { repair } = req;
 
-    const {hasError, errorMessage, repairData} = partialValidateRepair(req.body)
+    const { hasError, errorMessage, repairData } = partialValidateRepair(
+      req.body
+    );
 
-    if(hasError) {
+    if (hasError) {
       return res.status(421).json({
-        status: 'error',
-        message: errorMessage
-      })
+        status: "error",
+        message: errorMessage,
+      });
     }
     const repairUpdated = await repairService.updateRepair(repair, repairData);
 
@@ -61,7 +63,7 @@ export const updateRepair = async (req, res) => {
 
 export const deleteRepair = async (req, res) => {
   try {
-    const {repair} = req
+    const { repair } = req;
 
     await repairService.deleteRepair(repair);
     return res.status(204).json(null);

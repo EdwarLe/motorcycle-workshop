@@ -1,19 +1,17 @@
 import { partialValidateRepair, validateRepair } from "./repairs.schema.js";
 import { RepairService } from "./repairs.service.js";
+import {catchAsync} from '../errors/index.js'
+
 
 const repairService = new RepairService();
 
-export const findAllRepairs = async (req, res) => {
-  try {
+export const findAllRepairs = catchAsync(async (req, res) => {
     const repairs = await repairService.findAllRepairs();
     return res.status(201).json(repairs);
-  } catch (error) {
-    return res.status(500).json(error);
-  }
-};
+  
+});
 
-export const createRepair = async (req, res) => {
-  try {
+export const createRepair = catchAsync(async (req, res) => {
     const { hasError, errorMessage, repairData } = validateRepair(req.body);
 
     const repair = await repairService.createRepair(repairData);
@@ -25,22 +23,16 @@ export const createRepair = async (req, res) => {
       });
     }
     return res.status(201).json(repair);
-  } catch (error) {
-    return res.status(500).json(error);
-  }
-};
+  
+});
 
-export const findOneRepair = async (req, res) => {
-  try {
+export const findOneRepair = catchAsync(async (req, res) => {
+
     const { repair } = req;
     return res.status(201).json(repair);
-  } catch (error) {
-    return res.status(500).json(error);
-  }
-};
+});
 
-export const updateRepair = async (req, res) => {
-  try {
+export const updateRepair = catchAsync(async (req, res) => {
     const { repair } = req;
 
     const { hasError, errorMessage, repairData } = partialValidateRepair(
@@ -56,18 +48,13 @@ export const updateRepair = async (req, res) => {
     const repairUpdated = await repairService.updateRepair(repair, repairData);
 
     return res.status(201).json(repairUpdated);
-  } catch (error) {
-    return res.status(500).json(error);
-  }
-};
 
-export const deleteRepair = async (req, res) => {
-  try {
+});
+
+export const deleteRepair = catchAsync(async (req, res) => {
+
     const { repair } = req;
 
     await repairService.deleteRepair(repair);
     return res.status(204).json(null);
-  } catch (error) {
-    return res.status(500).json(error);
-  }
-};
+});

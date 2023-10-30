@@ -6,7 +6,12 @@ export const repairsSchema = z.object({
     invalid_type_error: "Date must be in a correct format",
     required_error: "Date is required",
   }),
-  motorsNumber: z.string().min(12).max(50),
+  motorsNumber: z
+    .string()
+    .min(12, {
+      invalid_type_error: "Number can not be less than 12 characteres",
+    })
+    .max(50),
   description: z.string(),
   userId: z.number(),
 });

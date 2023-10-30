@@ -13,12 +13,12 @@ export const router = Router();
 
 router.route("/").get(findAllUsers);
 
-router.post("/register", protect, restricTo('employee'), createUser);
+router.post("/", protect, restricTo("employee", "owner"), createUser);
 
 router.post("/login", login);
 
 router
   .route("/:id")
   .get(validateExistUser, findOneUser)
-  .patch(validateExistUser, updateUser)
-  .delete(validateExistUser, deleteUser);
+  .patch(validateExistUser, protect, restricTo("owner"), updateUser)
+  .delete(validateExistUser, protect, restricTo("owner"), deleteUser);

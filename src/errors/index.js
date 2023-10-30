@@ -1,2 +1,2 @@
-export * from './appErrors.js'
-export * from './catchAsync.js'
+export * from "./appErrors.js";
+export * from "./catchAsync.js";

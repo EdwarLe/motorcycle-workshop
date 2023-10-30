@@ -9,10 +9,10 @@ app.use(express.json());
 
 app.use("/api/v1", router);
 
-app.all('*', (req, res, next) =>{
-    next(new AppError(`Can´t find ${req.originalUrl} on this server`))
-})
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can´t find ${req.originalUrl} on this server`));
+});
 
-app.use(globalErrorHandler)
+app.use(globalErrorHandler);
 
 export default app;

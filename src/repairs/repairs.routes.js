@@ -7,13 +7,16 @@ import {
   updateRepair,
 } from "./repairs.controller.js";
 import { validateExistRepairs } from "./repairs.middlewares.js";
+import { protect, restricTo } from "../users/users.middlewares.js";
 
 export const router = Router();
 
-router.route("/").get(findAllRepairs).post(createRepair);
+router.route("/").get(findAllRepairs);
+
+router.post("/", protect, restricTo("employee", "owner"), createRepair);
 
 router
   .route("/:id")
   .get(validateExistRepairs, findOneRepair)
-  .patch(validateExistRepairs, updateRepair)
-  .delete(validateExistRepairs, deleteRepair);
+  .patch(validateExistRepairs, protect, restricTo("employee"), updateRepair)
+  .delete(validateExistRepairs, protect, restricTo("employee"), deleteRepair);

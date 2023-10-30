@@ -6,11 +6,11 @@
 
 |  Verb  |               EndPoint               | Description |
 |--------|--------------------------------------|-------------|
-|  GET   | http://localhost:3001/api/v1/user    | Busqueda de todos los usuarios|
-|  POST  | http://localhost:3001/api/v1/user    | Creación de usuario|
-|  GET   | http://localhost:3001/api/v1/user/id | Busqueda de usuario por id|
-| PATCH  | http://localhost:3001/api/v1/user/id | Actualización usuario |
-| DELETE | http://localhost:3001/api/v1/user/id | Eliminación de usuario|
+|  GET   | http://localhost:3001/api/v1/users    | Busqueda de todos los usuarios|
+|  POST  | http://localhost:3001/api/v1/users    | Creación de usuario|
+|  GET   | http://localhost:3001/api/v1/users/id | Busqueda de usuario por id|
+| PATCH  | http://localhost:3001/api/v1/users/id | Actualización usuario |
+| DELETE | http://localhost:3001/api/v1/users/id | Eliminación de usuario|
 
 
 ### Repairs

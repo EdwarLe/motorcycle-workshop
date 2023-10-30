@@ -22,6 +22,7 @@ const Repair = sequelize.define("repair", {
   motorsNumber: {
     type: DataTypes.STRING(50),
     allowNull: false,
+    field: "motors_number",
   },
 
   // brand: {
@@ -43,6 +44,7 @@ const Repair = sequelize.define("repair", {
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: "user_id",
   },
 });
 

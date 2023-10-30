@@ -1,11 +1,28 @@
+import { Op } from "sequelize";
 import Repair from "./repairs.model.js";
+import User from "../users/users.model.js";
 
 export class RepairService {
-  async findAllRepairs() {
+  async findAllRepairs(status) {
+    let whereClause = {
+      status,
+    };
+
+    if (!status) {
+      whereClause.status = {
+        [Op.in]: ["pending", "completed"],
+      };
+    }
+
     return await Repair.findAll({
-      where: {
-        status: "pending",
-      },
+      where: whereClause,
+      include: [
+        {
+          model: User,
+          as: "repairFromUser",
+          attributes: ["name", "user_id", "email"],
+        },
+      ],
     });
   }
 
@@ -13,17 +30,35 @@ export class RepairService {
     return await Repair.create(data);
   }
 
-  async findOneRepair(id) {
+  async findOneRepair(id, status) {
+    let whereClause = {
+      id,
+      status,
+    };
+
+    if (!status) {
+      whereClause.status = {
+        [Op.in]: ["pending", "completed"],
+      };
+    }
+
     return await Repair.findOne({
-      where: {
-        id,
-        status: "pending",
-      },
+      where: whereClause,
+      include: [
+        {
+          model: User,
+          as: "repairFromUser",
+          attributes: ["name", "user_id", "email"],
+        },
+      ],
     });
   }
 
-  async updateRepair(repair) {
-    return await repair.update({ status: "completed" });
+  async updateRepair(repair, data) {
+    return await repair.update({
+      ...data,
+      status: "completed",
+    });
   }
 
   async deleteRepair(repair) {
